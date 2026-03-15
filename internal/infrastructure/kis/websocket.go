@@ -10,6 +10,7 @@ import (
 
 	// standard
 	"context"
+	"encoding/json"
 	"log"
 
 	// external
@@ -20,6 +21,16 @@ import (
 // 한국투자증권 WebSocket Client
 type WSClient struct {
 	conn *websocket.Conn
+}
+
+// KIS Header 구조
+type KISHeader struct {
+	TrID string `json:"tr_id"`
+}
+
+// KIS Message 구조
+type KISMessage struct {
+	Header KISHeader `json:"header"`
 }
 
 // Connect
@@ -90,10 +101,15 @@ func (w *WSClient) Run(ctx context.Context, handler func([]byte)) {
 				return
 			}
 
-			// pingpong 처리
-			if string(msg) == `{"header":{"tr_id":"PINGPONG"}}` {
-				w.conn.WriteMessage(websocket.TextMessage, msg)
-				continue
+			// JSON 메시지 파싱
+			var m KISMessage
+			if err := json.Unmarshal(msg, &m); err == nil {
+
+				// pingpong 처리
+				if m.Header.TrID == "PINGPONG" {
+					log.Println("recv pingpong")
+					continue
+				}
 			}
 
 			handler(msg)
