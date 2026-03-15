@@ -1,0 +1,9 @@
+# config/config.dev.yml
+server:
+  log_level: "debug"
+kis:
+  app_key: "DEV_KEY"
+  app_secret: "DEV_SECRET"
+
+  websocket_url: "wss://openapi.koreainvestment.com:9443/websocket"
+  approval_url: "https://openapi.koreainvestment.com:9443/oauth2/Approval"
