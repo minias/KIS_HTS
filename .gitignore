@@ -24,8 +24,24 @@ profile.cov
 go.work
 go.work.sum
 
-# env file
+# config
+config/config.*.yml
+!config/config.example.yml
+
+# env
 .env
+.env.*
+
+# build
+build/
+dist/
+
+# logs
+logs/
+*.log
+
+# mac
+.DS_Store
 
 # Editor/IDE
 # .idea/
